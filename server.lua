@@ -70,4 +70,4 @@ Citizen.CreateThread(function()
     end
 end)
 
-TriggerEvent('mcd_lib:fuzdvgsgzhufdghuiz', GetCurrentResourceName() , 'esx_duty')
+TriggerEvent('mcd_lib:fuzdvgsgzhufdghuiz', GetCurrentResourceName() , 'mcd_duty')
