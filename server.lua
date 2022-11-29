@@ -1,6 +1,7 @@
 Citizen.CreateThread(function()
+    Citizen.Wait(10000)
     if Config.CreateOffDutyJob then
-        MCD.PrintConsole('[~y~'..GetCurrentResourceName()..'~s~][~b~Info~s~]\t ~g~Checking for not existing Off-Duty Job')
+        print(MCD.Function.ConvertPrint('[~b~Info~s~] ~g~Checking~s~ for ~r~not existing~s~ Off-Duty Jobs'))
         MySQL.Async.fetchAll('SELECT * FROM jobs ', {}, function(result)
             if #result > 0 then
                 for k,v in ipairs(Config.Locations) do
@@ -18,15 +19,14 @@ Citizen.CreateThread(function()
                     end
                 end
             else
-                MCD.PrintConsole("[~y~"..GetCurrentResourceName().."~s~][~b~Info~s~]\t ~r~Couldn't Select Jobs From Database")
+                print(MCD.Function.ConvertPrint("[~o~ERROR~s~] ~r~Couldn't Select Jobs From Database"))
             end
         end)
-        Citizen.Wait(5000)
-        MCD.PrintConsole('[~y~'..GetCurrentResourceName()..'~s~][~b~Info~s~]\t~g~Finished Searching')
+        Citizen.Wait(3000)
         local createt = 0
         for i,p in ipairs(Config.Locations) do
             if not p.exist then
-                MCD.PrintConsole('[~y~'..GetCurrentResourceName()..'~s~][~b~Info~s~]\t~g~Creating Off-Duty Job for ' .. p.onduty)
+                print(MCD.Function.ConvertPrint('[~b~Info~s~] ~g~Creating~s~ Off-Duty Job for ~p~' .. p.onduty))
                 MySQL.Async.insert('INSERT INTO jobs (name , label , whitelisted) VALUES (@name , @label , @whitelisted)', {
                     ['@name'] = p.offduty,
                     ['@label'] = 'Off - ' ..p.label,
@@ -54,20 +54,20 @@ Citizen.CreateThread(function()
                             Citizen.Wait(1000)
                         end
                     else
-                        MCD.PrintConsole("[~y~'..GetCurrentResourceName()..'~s~][~b~Info~s~]\t~r~Couldn't Select "..p.onduty.." From Database")
+                        print(MCD.Function.ConvertPrint("[~o~ERROR~s~] ~r~Couldn't Select "..p.onduty.." From Database"))
                     end
                 end)
                 Citizen.Wait(1000)
                 createt = createt + 1
-                MCD.PrintConsole('[~y~'..GetCurrentResourceName()..'~s~][~b~Info~s~]\t~g~Finsihed Off-Duty Job for ~b~' .. p.onduty)
+                print(MCD.Function.ConvertPrint('[~b~Info~s~] ~g~Finsihed~s~ Off-Duty Job for ~p~' .. p.onduty))
             end
         end      
         if createt > 0 then
-            MCD.PrintConsole('[~y~'..GetCurrentResourceName()..'~s~][~b~Info~s~]\t~g~Finished ~y~' .. createt .. '~s~ Jobs , ~o~please Restart the Server otherwise the Jobs are not direktly Ingame')
+            print(MCD.Function.ConvertPrint('[~b~Info~s~] ~g~Finished ~y~' .. createt .. '~s~ Jobs , ~o~please Restart the Server otherwise the Jobs are not direktly Ingame'))
         else
-            MCD.PrintConsole('[~y~'..GetCurrentResourceName()..'~s~][~b~Info~s~]\t~g~Finished ~y~' .. createt .. '~s~ Jobs')
+            print(MCD.Function.ConvertPrint('[~b~Info~s~] ~g~Finished ~y~' .. createt .. '~s~ Jobs'))
         end
     end
 end)
 
-TriggerEvent('mcd_lib:fuzdvgsgzhufdghuiz', GetCurrentResourceName() , 'mcd_duty')
+MCD.AddUpdateChecker('mcd_duty' , GetCurrentResourceName())

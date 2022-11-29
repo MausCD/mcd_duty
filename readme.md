@@ -49,7 +49,7 @@ Füge mcd_duty in resources Ordner ein
 
 starte den server neu und Viel Spaß
 
-**Des Weiteren [Support](Momentan nicht vergüfbar)**
+**[Support](Momentan nicht vergüfbar)**
 
 Wenn Sie Probleme, Kommentare oder Vorschläge haben, geben Sie diese bitte unten ein.
 

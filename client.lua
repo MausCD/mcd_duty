@@ -4,8 +4,6 @@ Citizen.CreateThread(function()
     local sleep = 2500
     while true do Citizen.Wait(sleep) 
         local Job = MCD.GetPlayerData().job.name
-        local ped = PlayerPedId()
-        local plycoords = GetEntityCoords(ped)
         for i,p in ipairs(Config.Locations) do
             p.draw = nil
             local draw = nil
@@ -17,8 +15,7 @@ Citizen.CreateThread(function()
             end
 
             if draw ~= 'not' then
-                local dist = #(plycoords - p.coords)
-                if dist <= Config.DrawDistance then
+                if MCD.Math.Dist(GetEntityCoords(PlayerPedId()) , p.coords , Config.DrawDistance) then
                     p.draw = draw
                 end
             end
@@ -40,13 +37,10 @@ Citizen.CreateThread(function()
                 else
                     color = Config.Marker.offduty
                 end
-                MCD.DawMarker(Config.Marker.type , p.coords , Config.Marker.height , Config.Marker.width , color , Config.Marker.bobUpAndDown , Config.Marker.faceCamera)
+                MCD.DrawMarker(Config.Marker.type , p.coords , Config.Marker.height , Config.Marker.width , color , Config.Marker.bobUpAndDown , Config.Marker.faceCamera)
 
-                if marker == nil or marker == i then
-                    local ped = PlayerPedId()
-                    local plycoords = GetEntityCoords(ped)
-                    local dist = #(plycoords - p.coords)
-                    if dist <= Config.Marker.width/2 then
+                if marker == nil or marker == i then                
+                    if MCD.Math.MDist(GetEntityCoords(PlayerPedId()) , p.coords , Config.Marker.width/2) then
                         marker = i
                     else
                         if marker == i then
@@ -78,7 +72,7 @@ Citizen.CreateThread(function()
         sleep = 500
         if marker then
             sleep = MCD.GetControllSpeed()
-            if IsControlJustReleased(0, 51) then
+            if MCD.IsControlJustRealeased(Config.Key) then
                 ToggleDuty(marker)
                 Citizen.Wait(2500)
             end
